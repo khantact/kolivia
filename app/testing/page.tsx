@@ -1,4 +1,5 @@
 "use client";
+import Link from "next/link";
 import { useState } from "react";
 
 const Testing = () => {
@@ -29,35 +30,37 @@ const Testing = () => {
   };
 
   return (
-    <div className="p-4">
-      <div className="border border-gray-300 p-4 rounded-lg h-96">
-        <div className="overflow-y-auto h-full">
-          {messages.map((message, index) => (
-            <div
-              key={index}
-              className={`text-${message.sender === "user" ? "right" : "left"}`}
-            >
-              {message.text}
-            </div>
-          ))}
+    <><div className="header">
+      <h1 className="text-4xl font-bold" style={{padding: 15}}><Link href="/">KOlivia</Link></h1>
+    </div><div className="p-4">
+        <div className="border border-gray-300 p-4 rounded-lg h-96">
+          <div className="overflow-y-auto h-full">
+            {messages.map((message, index) => (
+              <div
+                key={index}
+                className={`text-${message.sender === "user" ? "right" : "left"}`}
+              >
+                {message.text}
+              </div>
+            ))}
+          </div>
+        </div>
+        <div className="mt-4 flex">
+          <input
+            type="text"
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            placeholder="Type a message..."
+            className="p-2 flex-grow border border-gray-300 rounded-l-lg text-black" />
+          <button
+            onClick={handleUserMessage}
+            className="p-2 bg-blue-500 text-black rounded-r-lg"
+          >
+            Send
+          </button>
         </div>
       </div>
-      <div className="mt-4 flex">
-        <input
-          type="text"
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          placeholder="Type a message..."
-          className="p-2 flex-grow border border-gray-300 rounded-l-lg text-black"
-        />
-        <button
-          onClick={handleUserMessage}
-          className="p-2 bg-blue-500 text-black rounded-r-lg"
-        >
-          Send
-        </button>
-      </div>
-    </div>
+      </>
   );
 };
 
