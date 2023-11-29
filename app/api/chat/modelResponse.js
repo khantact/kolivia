@@ -1,9 +1,10 @@
+"use server";
 export async function query(data) {
   const response = await fetch(
     "https://api-inference.huggingface.co/models/Agreus/KOlivia-distilbert",
     {
       headers: {
-        Authorization: `Bearer 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`,
+        Authorization: `Bearer ${process.env.API_KEY}`,
       },
       method: "POST",
       body: JSON.stringify(data),

@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import { useState } from "react";
-import { query } from "../api/chat/route";
+import { query } from "../api/chat/modelResponse";
 
 const Testing = () => {
   const [messages, setMessages] = useState<
