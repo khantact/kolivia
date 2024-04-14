@@ -14,7 +14,7 @@ const SideNavBar = () => {
 			});
 	};
 	return (
-		<nav className="h-screen bg-gray-800 text-white">
+		<nav className="h-screen bg-gray-800 text-white min-w-[15vw]">
 			<div className="p-4">
 				<h1 className="text-xl font-bold border-b-4 shadow-md border-gray-700">
 					KOlivia

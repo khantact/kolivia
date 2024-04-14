@@ -1,10 +1,23 @@
 "use client";
 import React from "react";
 import SideNavBar from "@/components/sideNavBar";
+import { useEffect } from "react";
+import { auth } from "@/utils/firebase/Firebase";
+import { useRouter } from "next/navigation";
 export default function page() {
+	const router = useRouter();
+	useEffect(() => {
+		const unsubscribe = auth.onAuthStateChanged((user) => {
+			if (!user) {
+				router.push("/login");
+			}
+		});
+
+		return () => unsubscribe();
+	}, []);
 	return (
 		<div className="flex">
-			<div className="w-1/6">
+			<div className="">
 				<SideNavBar />
 			</div>
 			<div className="grow p-4">

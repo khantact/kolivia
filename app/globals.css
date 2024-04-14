@@ -18,3 +18,21 @@
 		@apply outline-none outline-purple-500 ring;
 	}
 }
+
+@layer utilities {
+	.scrollbar::-webkit-scrollbar {
+		@apply w-4;
+	}
+
+	.scrollbar::-webkit-scrollbar-track {
+		@apply rounded-full bg-black;
+	}
+
+	.scrollbar::-webkit-scrollbar-thumb {
+		@apply bg-purple-800 rounded-md;
+	}
+
+	.scrollbar::-webkit-scrollbar-thumb:hover {
+		@apply bg-purple-300;
+	}
+}
