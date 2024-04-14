@@ -4,7 +4,8 @@ import SideNavBar from "@/components/sideNavBar";
 import { useEffect } from "react";
 import { auth } from "@/utils/firebase/Firebase";
 import { useRouter } from "next/navigation";
-export default function page() {
+
+export default function Profile() {
 	const router = useRouter();
 	useEffect(() => {
 		const unsubscribe = auth.onAuthStateChanged((user) => {
@@ -14,6 +15,7 @@ export default function page() {
 		});
 
 		return () => unsubscribe();
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 	return (
 		<div className="flex">

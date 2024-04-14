@@ -6,7 +6,6 @@ import { auth } from "@/utils/firebase/Firebase";
 import { useRouter } from "next/navigation";
 
 const Chat = () => {
-	
 	const [messages, setMessages] = useState<
 		{ text: string; sender: "user" | "bot" }[]
 	>([]);
@@ -55,6 +54,7 @@ const Chat = () => {
 		});
 
 		return () => unsubscribe();
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
 	useEffect(() => {
