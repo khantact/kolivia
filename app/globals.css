@@ -3,6 +3,18 @@
 @tailwind utilities;
 
 :root {
-  background-color: #08050c;
-  color: #fff;
+	background-color: #08050c;
+	color: #fff;
+}
+
+@layer components {
+	.spinningBackground {
+		@apply -z-10 absolute inset-y-16 inset-x-0 w-16 rounded-full animate-rotate-360 bg-gradient-to-b from-pink-500 to-purple-600 blur-3xl mx-auto opacity-75;
+	}
+	.inputBox {
+		@apply mt-1 p-2 border rounded-md w-full text-black;
+	}
+	.inputBox:focus {
+		@apply outline-none outline-purple-500 ring;
+	}
 }

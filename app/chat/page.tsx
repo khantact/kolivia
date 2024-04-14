@@ -1,16 +1,18 @@
 "use client";
-import Link from "next/link";
-import { useState } from "react";
+
+import { useState, useEffect } from "react";
 import { query } from "../api/chat/modelResponse";
 import SideNavBar from "@/components/sideNavBar";
+import { auth } from "@/utils/firebase/Firebase";
+import { useRouter } from "next/navigation";
 
-const Testing = () => {
+const Chat = () => {
 	const [messages, setMessages] = useState<
 		{ text: string; sender: "user" | "bot" }[]
 	>([]);
 	const [input, setInput] = useState("");
 	const [botResponse, setBotResponse] = useState("");
-
+	const router = useRouter();
 	const handleUserMessage = async () => {
 		if (input.trim() !== "") {
 			// Preserve existing messages and add the new user message
@@ -23,19 +25,31 @@ const Testing = () => {
 					inputs: input,
 					options: { wait_for_model: true },
 				});
-				console.log(JSON.stringify(response));
+				// console.log(JSON.stringify(response));
 				setBotResponse(JSON.stringify(response));
+				// Add bot's response to messages state
+				setMessages((prevMessages) => [
+					...prevMessages,
+					{ text: botResponse, sender: "bot" },
+				]);
 			} catch (e) {
 				console.error(e);
 			}
 			setInput("");
-			setMessages((prevMessages) => [
-				...prevMessages,
-				{ text: botResponse, sender: "bot" },
-			]);
 			setBotResponse("");
 		}
 	};
+
+	useEffect(() => {
+		const unsubscribe = auth.onAuthStateChanged((user) => {
+			if (!user) {
+				router.push("/login");
+			}
+		});
+
+		// Cleanup function
+		return () => unsubscribe();
+	}, []);
 
 	return (
 		<div className="flex">
@@ -44,7 +58,7 @@ const Testing = () => {
 			</div>
 			<div className="grow flex flex-col">
 				<div className="bg-black grow p-4 h-3/4">
-					<div className="overflow-auto h-full mb-8 border-white border">
+					<div className="overflow-auto h-full border-white border">
 						{messages.map((message, index) => (
 							<div key={index} className="w-full">
 								<div className="flex">
@@ -82,4 +96,4 @@ const Testing = () => {
 	);
 };
 
-export default Testing;
+export default Chat;
