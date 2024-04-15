@@ -36,6 +36,7 @@ const Chat = () => {
 					inputs: input,
 					options: { wait_for_model: true },
 				});
+				console.log(response);
 				setBotResponse(JSON.stringify(response));
 			} catch (e) {
 				console.error(e);
