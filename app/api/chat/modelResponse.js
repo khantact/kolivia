@@ -95,10 +95,12 @@ const handleLabel = async (data, input) => {
 
 			var forecastReturn =
 				response.forecast.forecastday[0].hour.slice(currentHour);
+			console.log(forecastReturn);
 			return forecastReturn;
 		} catch (e) {
 			console.log(e);
 		}
+		console.log("returning default result")
 		return result;
 	}
 	return "I dont know :(";
