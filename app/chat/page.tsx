@@ -66,16 +66,6 @@ const Chat = () => {
 			chatboxRef.current.scrollTop = chatboxRef.current.scrollHeight;
 		}
 	}, [messages]);
-
-	// useEffect(() => {
-	// 	if (botResponse.trim() !== "") {
-	// 		setMessages((prevMessages) => [
-	// 			...prevMessages,
-	// 			{ text: botResponse, sender: "bot" },
-	// 		]);
-	// 	}
-	// }, [botResponse]);
-
 	useEffect(() => {
 		if (apiResponse.length > 1) {
 			if (apiResponse.length > 1) {
