@@ -50,12 +50,12 @@ const Chat = () => {
 	};
 
 	useEffect(() => {
-		// setCurrentTime(
-		// 	new Date().toLocaleTimeString([], {
-		// 		hour: "2-digit",
-		// 		hour12: false,
-		// 	})
-		// );
+		setCurrentTime(
+			new Date().toLocaleTimeString([], {
+				hour: "2-digit",
+				hour12: false,
+			})
+		);
 		const unsubscribe = auth.onAuthStateChanged((user) => {
 			if (!user) {
 				router.push("/login");
@@ -75,8 +75,8 @@ const Chat = () => {
 		try {
 			if (apiResponse.length > 1) {
 				if (apiResponse.length > 1) {
+					setApiResponse(apiResponse.slice(Number(currentTime)));
 					console.log(apiResponse);
-					// setApiResponse(apiResponse.slice(Number(currentTime)))
 					const forecastComponents = apiResponse.map(
 						(forecastItem: any, index) => (
 							<SingleForecast
