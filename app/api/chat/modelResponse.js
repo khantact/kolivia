@@ -92,10 +92,10 @@ const handleLabel = async (data, input) => {
 			const query = await fetch(apiURL);
 			const response = await query.json();
 			// returns the weather for the day starting from the current hours
-			console.log(
-				response.forecast.forecastday[0].hour.slice(currentHour)
-			);
-			return response.forecast.forecastday[0].hour.slice(currentHour);
+
+			var forecastReturn =
+				response.forecast.forecastday[0].hour.slice(currentHour);
+			return forecastReturn;
 		} catch (e) {
 			console.log(e);
 		}
