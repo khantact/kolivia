@@ -75,28 +75,28 @@ const Chat = () => {
 	useEffect(() => {
 		try {
 			if (apiResponse.length > 1) {
-				if (apiResponse.length > 1) {
-					const forecastComponents = apiResponse.map(
-						(forecastItem: any, index) => (
-							<SingleForecast
-								key={index}
-								forecastData={forecastItem}
-							/>
-						)
-					);
-					setMessages((prevMessages) => [
-						...prevMessages,
-						{ text: forecastComponents, sender: "bot" },
-					]);
-				} else {
-					setMessages((prevMessages) => [
-						...prevMessages,
-						{ text: "No forecast data available", sender: "bot" },
-					]);
-				}
+				const forecastComponents = apiResponse.map(
+					(forecastItem: any, index) => (
+						<SingleForecast
+							key={index}
+							forecastData={forecastItem}
+						/>
+					)
+				);
+				setMessages((prevMessages) => [
+					...prevMessages,
+					{ text: forecastComponents, sender: "bot" },
+				]);
 			}
 		} catch (e: any) {
 			console.log(e.message);
+			setMessages((prevMessages) => [
+				...prevMessages,
+				{
+					text: "There was an error retrieving the forecast, please try again.",
+					sender: "bot",
+				},
+			]);
 		}
 	}, [apiResponse]);
 
@@ -122,8 +122,6 @@ const Chat = () => {
 								) : (
 									<div className="flex">
 										<div className="m-4 text-wrap rounded-tr-lg rounded-br-lg rounded-bl-lg bg-pink-500 p-4 text-black max-w-[calc(50%-32px)]">
-											{/* {message.text} */}
-											{/* this following code is just to show what a bot weather response should look like */}
 											<div className="flex gap-5">
 												{message.text}
 											</div>
