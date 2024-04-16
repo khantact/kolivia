@@ -1,11 +1,15 @@
 "use client";
+
 import { useState, useEffect, useRef } from "react";
+import TypeIt from "typeit-react";
 import { query } from "../api/chat/modelResponse";
 import SideNavBar from "@/components/sideNavBar";
 import { auth } from "@/utils/firebase/Firebase";
 import { useRouter } from "next/navigation";
 import SingleForecast from "@/components/singleForecast";
 const Chat = () => {
+	const GREETING_MSG =
+		"Hi! I'm KOlivia! I can check the weather or make an appointment for you!";
 	const [messages, setMessages] = useState<
 		{ text: any; sender: "user" | "bot" }[]
 	>([]);
@@ -40,7 +44,6 @@ const Chat = () => {
 				// json currently
 				setApiResponse(response.slice(Number(currentTime)));
 				console.log(apiResponse);
-				setBotResponse("Haiiii");
 			} catch (e) {
 				console.error(e);
 			}
@@ -58,6 +61,13 @@ const Chat = () => {
 			})
 		);
 		const unsubscribe = auth.onAuthStateChanged((user) => {
+			setMessages((prevMessages) => [
+				...prevMessages,
+				{
+					text: GREETING_MSG,
+					sender: "bot",
+				},
+			]);
 			if (!user) {
 				router.push("/login");
 			}
@@ -121,9 +131,21 @@ const Chat = () => {
 									</div>
 								) : (
 									<div className="flex">
-										<div className="m-4 text-wrap rounded-tr-lg rounded-br-lg rounded-bl-lg bg-pink-500 p-4 text-black max-w-[calc(50%-32px)]">
-											<div className="flex gap-5">
-												{message.text}
+										<div className="m-4 text-wrap rounded-tr-lg rounded-br-lg rounded-bl-lg bg-pink-500 p-4 text-black max-w-[calc(50vw)]">
+											<div className="flex gap-5 flex-wrap">
+												{typeof message.text ===
+												"string" ? (
+													<TypeIt
+														options={{
+															speed: 15,
+															cursor: false,
+														}}
+													>
+														{message.text}
+													</TypeIt>
+												) : (
+													message.text
+												)}
 											</div>
 										</div>
 									</div>

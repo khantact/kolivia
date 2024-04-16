@@ -17,10 +17,17 @@ function SingleForecast({ forecastData }: any) {
 		timeValue = "12";
 	}
 	timeValue += hours >= 12 ? " PM" : " AM";
+	const currentTime = new Date().toLocaleTimeString([], {
+		hour: "2-digit",
+		hour12: false,
+	});
+	if (hours === Number(currentTime)) {
+		timeValue = "Now";
+	}
 
 	return (
 		<div>
-			<div className="flex flex-col gap-x-2 text-sm text-black">
+			<div className="flex flex-col gap-x-2 text-sm text-black shadow-2xl shadow-purple-800/50 rounded-lg">
 				<div className="text-center">{timeValue}</div>
 				<Image src={iconPath} alt="pic" width={75} height={75}></Image>
 				<div className="text-center">{fTemp}</div>
