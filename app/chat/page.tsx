@@ -70,8 +70,8 @@ const Chat = () => {
 		if (apiResponse.length > 1) {
 			if (apiResponse.length > 1) {
 				const forecastComponents = apiResponse.map(
-					(forecastItem: any) => (
-						<SingleForecast forecastData={forecastItem} />
+					(forecastItem: any, index) => (
+						<SingleForecast key = {index} forecastData={forecastItem} />
 					)
 				);
 				setMessages((prevMessages) => [
