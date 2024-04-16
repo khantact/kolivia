@@ -100,6 +100,7 @@ const Chat = () => {
 			}
 		} catch (e: any) {
 			console.log(e.message);
+			console.log("error has occured");
 			setMessages((prevMessages) => [
 				...prevMessages,
 				{
@@ -131,7 +132,7 @@ const Chat = () => {
 									</div>
 								) : (
 									<div className="flex">
-										<div className="m-4 text-wrap rounded-tr-lg rounded-br-lg rounded-bl-lg bg-pink-500 p-4 text-black max-w-[calc(50vw)]">
+										<div className="m-4 text-wrap rounded-tr-lg rounded-br-lg rounded-bl-lg bg-blue-400 p-4 text-black max-w-[calc(50vw)]">
 											<div className="flex gap-5 flex-wrap">
 												{typeof message.text ===
 												"string" ? (
@@ -186,7 +187,7 @@ const Chat = () => {
 					/>
 					<button
 						onClick={handleUserMessage}
-						className="p-4 bg-blue-500 text-black rounded-r-lg"
+						className="p-4 bg-blue-400 text-black rounded-r-lg"
 						disabled={chatDisabled}
 					>
 						Send

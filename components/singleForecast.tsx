@@ -27,7 +27,7 @@ function SingleForecast({ forecastData }: any) {
 
 	return (
 		<div>
-			<div className="flex flex-col gap-x-2 text-sm text-black shadow-2xl shadow-purple-800/50 rounded-lg">
+			<div className="flex flex-col gap-x-2 text-sm text-black shadow-2xl shadow-blue-800/75 border-blue-200/50 border-2 rounded-lg">
 				<div className="text-center">{timeValue}</div>
 				<Image src={iconPath} alt="pic" width={75} height={75}></Image>
 				<div className="text-center">{fTemp}</div>
