@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation";
 import SingleForecast from "@/components/singleForecast";
 const Chat = () => {
 	const [messages, setMessages] = useState<
-		{ text: string; sender: "user" | "bot" }[]
+		{ text: any; sender: "user" | "bot" }[]
 	>([]);
 
 	const [input, setInput] = useState("");
@@ -16,6 +16,7 @@ const Chat = () => {
 	const router = useRouter();
 	const [loading, setLoading] = useState(false);
 	const [chatDisabled, setChatDisabled] = useState(false);
+
 	const chatboxRef = useRef<HTMLDivElement>(null);
 	const handleKeyPress = (e: any) => {
 		if (e.key === "Enter" && !chatDisabled) {
@@ -66,14 +67,35 @@ const Chat = () => {
 		}
 	}, [messages]);
 
+	// useEffect(() => {
+	// 	if (botResponse.trim() !== "") {
+	// 		setMessages((prevMessages) => [
+	// 			...prevMessages,
+	// 			{ text: botResponse, sender: "bot" },
+	// 		]);
+	// 	}
+	// }, [botResponse]);
+
 	useEffect(() => {
-		if (botResponse.trim() !== "") {
-			setMessages((prevMessages) => [
-				...prevMessages,
-				{ text: botResponse, sender: "bot" },
-			]);
+		if (apiResponse.length > 1) {
+			if (apiResponse.length > 1) {
+				const forecastComponents = apiResponse.map(
+					(forecastItem: any) => (
+						<SingleForecast forecastData={forecastItem} />
+					)
+				);
+				setMessages((prevMessages) => [
+					...prevMessages,
+					{ text: forecastComponents, sender: "bot" },
+				]);
+			} else {
+				setMessages((prevMessages) => [
+					...prevMessages,
+					{ text: "No forecast data available", sender: "bot" },
+				]);
+			}
 		}
-	}, [botResponse]);
+	}, [apiResponse]);
 
 	return (
 		<div className="flex">
@@ -100,22 +122,7 @@ const Chat = () => {
 											{/* {message.text} */}
 											{/* this following code is just to show what a bot weather response should look like */}
 											<div className="flex gap-5">
-												{apiResponse.length > 0 ? (
-													apiResponse.map(
-														(forecastItem: any) => (
-															<SingleForecast
-																forecastData={
-																	forecastItem
-																}
-															/>
-														)
-													)
-												) : (
-													<p>
-														No forecast data
-														available
-													</p>
-												)}
+												{message.text}
 											</div>
 										</div>
 									</div>
