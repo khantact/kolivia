@@ -23,6 +23,8 @@ const handleLabel = async (data, input) => {
 		hour: "2-digit",
 		hour12: false,
 	});
+
+	console.log(currentHour);
 	const WEATHER_LABEL = "LABEL_2";
 	const QUESTION_LABEL = "LABEL_1";
 	let weatherResponse = false;

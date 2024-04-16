@@ -51,6 +51,12 @@ const Chat = () => {
 	};
 
 	useEffect(() => {
+		console.log(
+			new Date().toLocaleTimeString([], {
+				hour: "2-digit",
+				hour12: false,
+			})
+		);
 		const unsubscribe = auth.onAuthStateChanged((user) => {
 			if (!user) {
 				router.push("/login");
@@ -67,23 +73,30 @@ const Chat = () => {
 		}
 	}, [messages]);
 	useEffect(() => {
-		if (apiResponse.length > 1) {
+		try {
 			if (apiResponse.length > 1) {
-				const forecastComponents = apiResponse.map(
-					(forecastItem: any, index) => (
-						<SingleForecast key = {index} forecastData={forecastItem} />
-					)
-				);
-				setMessages((prevMessages) => [
-					...prevMessages,
-					{ text: forecastComponents, sender: "bot" },
-				]);
-			} else {
-				setMessages((prevMessages) => [
-					...prevMessages,
-					{ text: "No forecast data available", sender: "bot" },
-				]);
+				if (apiResponse.length > 1) {
+					const forecastComponents = apiResponse.map(
+						(forecastItem: any, index) => (
+							<SingleForecast
+								key={index}
+								forecastData={forecastItem}
+							/>
+						)
+					);
+					setMessages((prevMessages) => [
+						...prevMessages,
+						{ text: forecastComponents, sender: "bot" },
+					]);
+				} else {
+					setMessages((prevMessages) => [
+						...prevMessages,
+						{ text: "No forecast data available", sender: "bot" },
+					]);
+				}
 			}
+		} catch (e) {
+			console.log(e.message);
 		}
 	}, [apiResponse]);
 
