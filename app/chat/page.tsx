@@ -38,7 +38,8 @@ const Chat = () => {
 					options: { wait_for_model: true },
 				});
 				// json currently
-				setApiResponse(response);
+				setApiResponse(response.slice(Number(currentTime)));
+				console.log(apiResponse);
 				setBotResponse("Haiiii");
 			} catch (e) {
 				console.error(e);
@@ -75,8 +76,6 @@ const Chat = () => {
 		try {
 			if (apiResponse.length > 1) {
 				if (apiResponse.length > 1) {
-					setApiResponse(apiResponse.slice(Number(currentTime)));
-					console.log(apiResponse);
 					const forecastComponents = apiResponse.map(
 						(forecastItem: any, index) => (
 							<SingleForecast
