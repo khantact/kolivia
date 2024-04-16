@@ -95,7 +95,7 @@ const Chat = () => {
 					]);
 				}
 			}
-		} catch (e) {
+		} catch (e: any) {
 			console.log(e.message);
 		}
 	}, [apiResponse]);
