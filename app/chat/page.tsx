@@ -70,6 +70,7 @@ const Chat = () => {
 		try {
 			if (apiResponse.length > 1) {
 				if (apiResponse.length > 1) {
+					console.log(apiResponse);
 					const forecastComponents = apiResponse.map(
 						(forecastItem: any, index) => (
 							<SingleForecast

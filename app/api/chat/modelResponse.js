@@ -98,9 +98,12 @@ const handleLabel = async (data, input) => {
 			console.log(forecastReturn);
 			return forecastReturn;
 		} catch (e) {
+			console.log(apiURL);
+			console.log(response);
+			console.log(dict);
 			console.log(e);
 		}
-		console.log("returning default result")
+		console.log("returning default result");
 		return result;
 	}
 	return "I dont know :(";
