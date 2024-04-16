@@ -4,18 +4,19 @@ import { query } from "../api/chat/modelResponse";
 import SideNavBar from "@/components/sideNavBar";
 import { auth } from "@/utils/firebase/Firebase";
 import { useRouter } from "next/navigation";
-
+import SingleForecast from "@/components/singleForecast";
 const Chat = () => {
 	const [messages, setMessages] = useState<
 		{ text: string; sender: "user" | "bot" }[]
 	>([]);
+
 	const [input, setInput] = useState("");
 	const [botResponse, setBotResponse] = useState("");
+	const [apiResponse, setApiResponse] = useState([{}]);
 	const router = useRouter();
 	const [loading, setLoading] = useState(false);
 	const [chatDisabled, setChatDisabled] = useState(false);
 	const chatboxRef = useRef<HTMLDivElement>(null);
-
 	const handleKeyPress = (e: any) => {
 		if (e.key === "Enter" && !chatDisabled) {
 			handleUserMessage();
@@ -36,8 +37,9 @@ const Chat = () => {
 					inputs: input,
 					options: { wait_for_model: true },
 				});
-				console.log(response);
-				setBotResponse(JSON.stringify(response));
+				// json currently
+				setApiResponse(response);
+				setBotResponse("Haiiii");
 			} catch (e) {
 				console.error(e);
 			}
@@ -88,14 +90,33 @@ const Chat = () => {
 							<div key={index} className="w-full">
 								{message.sender === "user" ? (
 									<div className="flex flex-row-reverse">
-										<div className="m-4 flex flex-row-reverse rounded-tl-lg rounded-br-lg rounded-bl-lg bg-purple-500 text-black p-3 max-w-[calc(50%-32px)]">
+										<div className="m-4 text-wrap flex flex-row-reverse rounded-tl-lg rounded-br-lg rounded-bl-lg bg-purple-500 text-black p-4 max-w-[calc(50%-32px)]">
 											{message.text}
 										</div>
 									</div>
 								) : (
 									<div className="flex">
-										<div className="m-4 rounded-tr-lg rounded-br-lg rounded-bl-lg bg-pink-500 p-3 text-black max-w-[calc(50%-32px)]">
-											{message.text}
+										<div className="m-4 text-wrap rounded-tr-lg rounded-br-lg rounded-bl-lg bg-pink-500 p-4 text-black max-w-[calc(50%-32px)]">
+											{/* {message.text} */}
+											{/* this following code is just to show what a bot weather response should look like */}
+											<div className="flex gap-5">
+												{apiResponse.length > 0 ? (
+													apiResponse.map(
+														(forecastItem: any) => (
+															<SingleForecast
+																forecastData={
+																	forecastItem
+																}
+															/>
+														)
+													)
+												) : (
+													<p>
+														No forecast data
+														available
+													</p>
+												)}
+											</div>
 										</div>
 									</div>
 								)}
