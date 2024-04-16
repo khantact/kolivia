@@ -9,14 +9,13 @@ const Chat = () => {
 	const [messages, setMessages] = useState<
 		{ text: any; sender: "user" | "bot" }[]
 	>([]);
-
 	const [input, setInput] = useState("");
 	const [botResponse, setBotResponse] = useState("");
 	const [apiResponse, setApiResponse] = useState([{}]);
 	const router = useRouter();
 	const [loading, setLoading] = useState(false);
 	const [chatDisabled, setChatDisabled] = useState(false);
-
+	const [currentTime, setCurrentTime] = useState("");
 	const chatboxRef = useRef<HTMLDivElement>(null);
 	const handleKeyPress = (e: any) => {
 		if (e.key === "Enter" && !chatDisabled) {
@@ -51,6 +50,12 @@ const Chat = () => {
 	};
 
 	useEffect(() => {
+		// setCurrentTime(
+		// 	new Date().toLocaleTimeString([], {
+		// 		hour: "2-digit",
+		// 		hour12: false,
+		// 	})
+		// );
 		const unsubscribe = auth.onAuthStateChanged((user) => {
 			if (!user) {
 				router.push("/login");
@@ -71,6 +76,7 @@ const Chat = () => {
 			if (apiResponse.length > 1) {
 				if (apiResponse.length > 1) {
 					console.log(apiResponse);
+					// setApiResponse(apiResponse.slice(Number(currentTime)))
 					const forecastComponents = apiResponse.map(
 						(forecastItem: any, index) => (
 							<SingleForecast

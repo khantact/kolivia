@@ -19,14 +19,13 @@ const handleLabel = async (data, input) => {
 	let secondMaxScore = 0;
 	let labelWithMaxScore = "";
 	let labelWithSecondMaxScore = "";
-	var currentHour = new Date().toLocaleTimeString([], {
+	const WEATHER_LABEL = "LABEL_2";
+	const QUESTION_LABEL = "LABEL_1";
+	let currentHour = new Date().toLocaleTimeString([], {
 		hour: "2-digit",
 		hour12: false,
 	});
 
-	console.log(currentHour);
-	const WEATHER_LABEL = "LABEL_2";
-	const QUESTION_LABEL = "LABEL_1";
 	let weatherResponse = false;
 	for (let i = 0; i < data.length; i++) {
 		for (let j = 0; j < data[i].length; j++) {
@@ -93,8 +92,9 @@ const handleLabel = async (data, input) => {
 			const response = await query.json();
 			// returns the weather for the day starting from the current hours
 
-			var forecastReturn =
-				response.forecast.forecastday[0].hour.slice(currentHour);
+			var forecastReturn = response.forecast.forecastday[0].hour.slice(
+				Number(currentHour)
+			);
 			console.log(forecastReturn);
 			return forecastReturn;
 		} catch (e) {
