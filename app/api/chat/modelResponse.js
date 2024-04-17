@@ -8,6 +8,7 @@ export async function query(data) {
 			},
 			method: "POST",
 			body: JSON.stringify(data),
+			options: data.options,
 		}
 	);
 	const result = await response.json();
@@ -47,7 +48,13 @@ const handleLabel = async (data, input) => {
 	) {
 		weatherResponse = true;
 	}
-
+	console.log("weatherResponse", weatherResponse);
+	console.log(
+		"labelwithmax:",
+		labelWithMaxScore,
+		"labelwithsecond:",
+		labelWithSecondMaxScore
+	);
 	if (weatherResponse) {
 		var dict = {};
 		const response = await fetch(
@@ -90,7 +97,9 @@ const handleLabel = async (data, input) => {
 		try {
 			const query = await fetch(apiURL);
 			const response = await query.json();
+			console.log(response);
 			console.log(response.forecast.forecastday[0].hour);
+			console.log(apiURL);
 			return response.forecast.forecastday[0].hour;
 		} catch (e) {
 			console.log(apiURL);

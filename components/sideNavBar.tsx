@@ -2,6 +2,11 @@ import Link from "next/link";
 import { auth } from "@/utils/firebase/Firebase";
 import { signOut } from "firebase/auth";
 import { useRouter } from "next/navigation";
+import { RiHome3Line } from "react-icons/ri";
+import { IoIosChatboxes } from "react-icons/io";
+import { MdAccountCircle } from "react-icons/md";
+import { FaSignOutAlt } from "react-icons/fa";
+
 const SideNavBar = () => {
 	const router = useRouter();
 	const handleSignOut = () => {
@@ -14,43 +19,47 @@ const SideNavBar = () => {
 			});
 	};
 	return (
-		<nav className="h-screen bg-gray-800 text-white min-w-[15vw]">
-			<div className="p-4">
-				<h1 className="text-xl font-bold border-b-4 shadow-md border-gray-700">
+		<nav className="h-screen bg-gray-800 text-white min-w-[15vw] p-4">
+			<div className="">
+				<h1 className="text-2xl font-bold border-b-4 shadow-md border-gray-700 w-full">
 					KOlivia
 				</h1>
 			</div>
 			<ul className="space-y-2">
-				<li>
+				<li className="">
 					<Link
 						href="/"
-						className="block py-2 px-4 hover:bg-gray-700"
+						className="py-2 mt-4 p-2 hover:bg-gray-700 w-full flex gap-4 rounded-md"
 					>
+						<RiHome3Line className="text-xl" />
 						Home
 					</Link>
 				</li>
-				<li>
+				<li className="">
 					<Link
 						href="/chat"
-						className="block py-2 px-4 hover:bg-gray-700"
+						className="py-2 p-2 hover:bg-gray-700 w-full flex gap-4 rounded-md"
 					>
+						<IoIosChatboxes className="text-xl" />
 						Chat
 					</Link>
 				</li>
-				<li>
+				<li className="flex">
 					<Link
 						href="/profile"
-						className="block py-2 px-4 hover:bg-gray-700"
+						className="py-2 p-2 hover:bg-gray-700 w-full flex gap-4 rounded-md"
 					>
+						<MdAccountCircle className="text-xl" />
 						Profile
 					</Link>
 				</li>
-				<li>
+				<li className="flex">
 					<Link
 						href="#"
-						className="block py-2 px-4 hover:bg-gray-700 "
+						className="py-2 p-2 hover:bg-gray-700 w-full flex gap-4 rounded-md"
 						onClick={handleSignOut}
 					>
+						<FaSignOutAlt className="text-xl" />
 						Sign Out
 					</Link>
 				</li>
