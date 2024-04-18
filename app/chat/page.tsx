@@ -12,6 +12,7 @@ const Chat = () => {
 	const [messages, setMessages] = useState<
 		{ text: any; sender: "user" | "bot" }[]
 	>([]);
+	const [mounted, setMounted] = useState(false);
 	const [input, setInput] = useState("");
 	const [botResponse, setBotResponse] = useState("");
 	const [apiResponse, setApiResponse] = useState([{}]);
@@ -55,20 +56,7 @@ const Chat = () => {
 	};
 
 	useEffect(() => {
-		setCurrentTime(
-			new Date().toLocaleTimeString([], {
-				hour: "2-digit",
-				hour12: false,
-			})
-		);
 		const unsubscribe = auth.onAuthStateChanged((user) => {
-			setMessages((prevMessages) => [
-				...prevMessages,
-				{
-					text: GREETING_MSG,
-					sender: "bot",
-				},
-			]);
 			if (!user) {
 				router.push("/login");
 			}
@@ -78,6 +66,18 @@ const Chat = () => {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
+	useEffect(() => {
+		setMounted(true);
+		if (mounted) {
+			setMessages((prevMessages) => [
+				...prevMessages,
+				{
+					text: GREETING_MSG,
+					sender: "bot",
+				},
+			]);
+		}
+	}, [mounted]);
 	useEffect(() => {
 		if (chatboxRef.current) {
 			chatboxRef.current.scrollTop = chatboxRef.current.scrollHeight;
