@@ -44,8 +44,9 @@ const Chat = () => {
 				});
 				// json currently
 				console.log("response", response);
-				setApiResponse(response.slice(Number(currentTime)));
-				console.log(apiResponse);
+
+				setApiResponse(response.slice(Number(getDate())));
+				console.log("currenthour:", getDate());
 			} catch (e) {
 				console.error(e);
 			}
@@ -53,6 +54,12 @@ const Chat = () => {
 			setChatDisabled(false);
 			setInput("");
 		}
+	};
+
+	const getDate = () => {
+		const currentDate = new Date();
+		let currentHour = currentDate.getHours();
+		return currentHour;
 	};
 
 	useEffect(() => {

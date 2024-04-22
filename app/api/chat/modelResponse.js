@@ -1,7 +1,7 @@
 "use server";
 export async function query(data) {
 	const response = await fetch(
-		"https://api-inference.huggingface.co/models/Agreus/KOlivia-distilbert",
+		"https://api-inference.huggingface.co/models/Agreus/KOlivia-classifier-v2",
 		{
 			headers: {
 				Authorization: `Bearer ${process.env.API_KEY}`,
@@ -48,13 +48,7 @@ const handleLabel = async (data, input) => {
 	) {
 		weatherResponse = true;
 	}
-	console.log("weatherResponse", weatherResponse);
-	console.log(
-		"labelwithmax:",
-		labelWithMaxScore,
-		"labelwithsecond:",
-		labelWithSecondMaxScore
-	);
+
 	if (weatherResponse) {
 		var dict = {};
 		const response = await fetch(
@@ -95,7 +89,7 @@ const handleLabel = async (data, input) => {
 
 		let apiURL = `http://api.weatherapi.com/v1/forecast.json?key=${process.env.WEATHER_API_KEY}&q=${dict["GPE"]}&days=1&aqi=no&alerts=no`;
 		try {
-			const query = await fetch(apiURL);
+			const query = await fetch(apiURL, { cache: "no-store" });
 			const response = await query.json();
 			console.log(response);
 			console.log(response.forecast.forecastday[0].hour);
