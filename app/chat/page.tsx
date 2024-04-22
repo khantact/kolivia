@@ -43,9 +43,17 @@ const Chat = () => {
 					options: { wait_for_model: true },
 				});
 				// json currently
-				console.log("response", response);
-
-				setApiResponse(response.slice(Number(getDate())));
+				if (response["type"] === "weather") {
+					response["data"] = response["data"].slice(
+						Number(getDate())
+					);
+					setApiResponse(response);
+				} else {
+					setMessages((prevMessages) => [
+						...prevMessages,
+						{ text: response, sender: "bot" },
+					]);
+				}
 				console.log("currenthour:", getDate());
 			} catch (e) {
 				console.error(e);
@@ -92,9 +100,10 @@ const Chat = () => {
 	}, [messages]);
 	useEffect(() => {
 		try {
-			if (apiResponse.length > 1) {
-				const forecastComponents = apiResponse.map(
-					(forecastItem: any, index) => (
+			console.log("type", apiResponse);
+			if ((apiResponse as any)["type"] === "weather") {
+				const forecastComponents = (apiResponse as any)["data"].map(
+					(forecastItem: any, index: any) => (
 						<SingleForecast
 							key={index}
 							forecastData={forecastItem}

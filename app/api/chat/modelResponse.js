@@ -1,19 +1,23 @@
 "use server";
 export async function query(data) {
-	const response = await fetch(
-		"https://api-inference.huggingface.co/models/Agreus/KOlivia-classifier-v2",
-		{
-			headers: {
-				Authorization: `Bearer ${process.env.API_KEY}`,
-			},
-			method: "POST",
-			body: JSON.stringify(data),
-			options: data.options,
-		}
-	);
-	const result = await response.json();
-	let botResponse = handleLabel(result, data);
-	return botResponse;
+	try {
+		const response = await fetch(
+			"https://api-inference.huggingface.co/models/Agreus/KOlivia-classifier-v2",
+			{
+				headers: {
+					Authorization: `Bearer ${process.env.API_KEY}`,
+				},
+				method: "POST",
+				body: JSON.stringify(data),
+				options: data.options,
+			}
+		);
+		const result = await response.json();
+		let botResponse = handleLabel(result, data);
+		return botResponse;
+	} catch (error) {
+		return "Error processing your request please try again";
+	}
 }
 const handleLabel = async (data, input) => {
 	let maxScore = 0;
@@ -22,6 +26,8 @@ const handleLabel = async (data, input) => {
 	let labelWithSecondMaxScore = "";
 	const WEATHER_LABEL = "LABEL_2";
 	const QUESTION_LABEL = "LABEL_1";
+	const DEFAULT_RESPONSE = "I dont know how to answer that question, sorry!";
+
 	// let currentHour = new Date().toLocaleTimeString([], {
 	// 	hour: "2-digit",
 	// 	hour12: false,
@@ -41,12 +47,17 @@ const handleLabel = async (data, input) => {
 			}
 		}
 	}
-	if (
-		(labelWithMaxScore === QUESTION_LABEL &&
-			labelWithSecondMaxScore === WEATHER_LABEL) ||
-		labelWithMaxScore === WEATHER_LABEL
-	) {
+	console.log(
+		"first:",
+		labelWithMaxScore,
+		"second:",
+		labelWithSecondMaxScore
+	);
+	if (labelWithMaxScore === WEATHER_LABEL) {
 		weatherResponse = true;
+	} else if (labelWithMaxScore === QUESTION_LABEL) {
+		console.log("not weather");
+		return DEFAULT_RESPONSE;
 	}
 
 	if (weatherResponse) {
@@ -91,10 +102,11 @@ const handleLabel = async (data, input) => {
 		try {
 			const query = await fetch(apiURL, { cache: "no-store" });
 			const response = await query.json();
-			console.log(response);
-			console.log(response.forecast.forecastday[0].hour);
 			console.log(apiURL);
-			return response.forecast.forecastday[0].hour;
+			return {
+				data: response.forecast.forecastday[0].hour,
+				type: "weather",
+			};
 		} catch (e) {
 			console.log(apiURL);
 			console.log(response);
@@ -104,7 +116,7 @@ const handleLabel = async (data, input) => {
 		console.log("returning default result");
 		return result;
 	}
-	return "I dont know :(";
+	return DEFAULT_RESPONSE;
 };
 // Appointments - LABEL_0
 // Questions - LABEL_1
