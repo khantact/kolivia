@@ -29,7 +29,7 @@ const SideNavBar = () => {
 				<li className="">
 					<Link
 						href="/"
-						className="py-2 mt-4 p-2 hover:bg-gray-700 w-full flex gap-4 rounded-md"
+						className="py-2 mt-4 p-2 hover:bg-gray-700 w-full flex gap-4 rounded-md transition ease-in duration-50"
 					>
 						<RiHome3Line className="text-xl" />
 						Home
@@ -38,7 +38,7 @@ const SideNavBar = () => {
 				<li className="">
 					<Link
 						href="/chat"
-						className="py-2 p-2 hover:bg-gray-700 w-full flex gap-4 rounded-md"
+						className="py-2 p-2 hover:bg-gray-700 w-full flex gap-4 rounded-md transition ease-in duration-50"
 					>
 						<IoIosChatboxes className="text-xl" />
 						Chat
@@ -47,7 +47,7 @@ const SideNavBar = () => {
 				<li className="flex">
 					<Link
 						href="/profile"
-						className="py-2 p-2 hover:bg-gray-700 w-full flex gap-4 rounded-md"
+						className="py-2 p-2 hover:bg-gray-700 w-full flex gap-4 rounded-md transition ease-in duration-50"
 					>
 						<MdAccountCircle className="text-xl" />
 						Profile
@@ -56,7 +56,7 @@ const SideNavBar = () => {
 				<li className="flex">
 					<Link
 						href="#"
-						className="py-2 p-2 hover:bg-gray-700 w-full flex gap-4 rounded-md"
+						className="py-2 p-2 hover:bg-gray-700 w-full flex gap-4 rounded-md transition ease-in duration-50"
 						onClick={handleSignOut}
 					>
 						<FaSignOutAlt className="text-xl" />

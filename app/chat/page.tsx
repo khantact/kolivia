@@ -21,6 +21,8 @@ const Chat = () => {
 	const [chatDisabled, setChatDisabled] = useState(false);
 	const [currentTime, setCurrentTime] = useState("");
 	const chatboxRef = useRef<HTMLDivElement>(null);
+
+	// HELPER FUNCTIONS
 	const handleKeyPress = (e: any) => {
 		if (e.key === "Enter" && !chatDisabled) {
 			handleUserMessage();
@@ -64,11 +66,17 @@ const Chat = () => {
 		}
 	};
 
+	const clearChat = () => {
+		setMessages([]);
+	};
+
 	const getDate = () => {
 		const currentDate = new Date();
 		let currentHour = currentDate.getHours();
 		return currentHour;
 	};
+
+	// EFFECT HOOKS
 
 	useEffect(() => {
 		const unsubscribe = auth.onAuthStateChanged((user) => {
@@ -149,7 +157,7 @@ const Chat = () => {
 									</div>
 								) : (
 									<div className="flex">
-										<div className="m-4 text-wrap rounded-tr-lg rounded-br-lg rounded-bl-lg bg-blue-400 p-4 text-black max-w-[calc(50vw)]">
+										<div className="m-4 text-wrap rounded-tr-lg rounded-br-lg rounded-bl-lg bg-blue-500 p-4 text-black max-w-[calc(50vw)]">
 											<div className="flex gap-5 flex-wrap">
 												{typeof message.text ===
 												"string" ? (
@@ -192,6 +200,12 @@ const Chat = () => {
 						) : null}
 					</div>
 				</div>
+				<button
+					onClick={clearChat}
+					className="absolute bottom-20 right-[40vw] bg-purple-500 p-2 rounded-md text-black hover:bg-purple-700 transition ease-in duration-100"
+				>
+					Clear Chat
+				</button>
 				<div className="flex m-4">
 					<input
 						type="text"
@@ -204,7 +218,7 @@ const Chat = () => {
 					/>
 					<button
 						onClick={handleUserMessage}
-						className="p-4 bg-blue-400 text-black rounded-r-lg"
+						className="p-4 bg-purple-500 text-black rounded-r-lg"
 						disabled={chatDisabled}
 					>
 						Send
