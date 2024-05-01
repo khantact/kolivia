@@ -24,16 +24,25 @@ const handleLabel = async (data, input) => {
 	let secondMaxScore = 0;
 	let labelWithMaxScore = "";
 	let labelWithSecondMaxScore = "";
-	const WEATHER_LABEL = "LABEL_2";
+	let weatherResponse = false;
+	let appointmentResponse = false;
+	const APPOINTMENT_LABEL = "LABEL_0";
 	const QUESTION_LABEL = "LABEL_1";
+	const WEATHER_LABEL = "LABEL_2";
 	const DEFAULT_RESPONSE = "I dont know how to answer that question, sorry!";
 
+	// Vars for appointment model
+	const REASON_LABEL = "REASON";
+	const DATE_START = "DATE_START";
+	const DATE_END = "DATE_END";
+	let calendarReason = "";
+	let dateStart = "";
+	let dateEnd = "";
 	// let currentHour = new Date().toLocaleTimeString([], {
 	// 	hour: "2-digit",
 	// 	hour12: false,
 	// });
 
-	let weatherResponse = false;
 	for (let i = 0; i < data.length; i++) {
 		for (let j = 0; j < data[i].length; j++) {
 			const obj = data[i][j];
@@ -47,16 +56,28 @@ const handleLabel = async (data, input) => {
 			}
 		}
 	}
-	console.log(
-		"first:",
-		labelWithMaxScore,
-		"second:",
-		labelWithSecondMaxScore
-	);
+
 	if (labelWithMaxScore === WEATHER_LABEL) {
 		weatherResponse = true;
+	} else if (labelWithMaxScore === APPOINTMENT_LABEL) {
+		appointmentResponse = true;
+		appointmentMapping(input["inputs"]).then((response) => {
+			// example response:
+			// [{"entity_group":"REASON","word":"go to the Dentist","start":23,"end":40,"score":1},{"entity_group":"PM_TIME_START","word":"3","start":46,"end":47,"score":1},{"entity_group":"DATE_END","word":"5","start":48,"end":49,"score":1}]
+			response.forEach((element) => {
+				console.log(element);
+				// element is dictionary
+				if (element[entity_group] === REASON_LABEL) {
+					calendarReason = element[word];
+				} else if (element[entity_group] === DATE_START) {
+					dateStart = element[word];
+				} else if (element[entity_group] === DATE_END) {
+					dateEnd = element[word];
+				}
+			});
+		});
+		return;
 	} else if (labelWithMaxScore === QUESTION_LABEL) {
-		console.log("not weather");
 		return DEFAULT_RESPONSE;
 	}
 
@@ -115,27 +136,30 @@ const handleLabel = async (data, input) => {
 		}
 		console.log("returning default result");
 		return result;
+	} else if (appointmentResponse) {
 	}
 	return DEFAULT_RESPONSE;
 };
+
+async function appointmentMapping(data) {
+	if (data[data.length - 1] !== ".") {
+		data += ".";
+	}
+
+	const response = await fetch(
+		"https://api-inference.huggingface.co/models/Agreus/en_pipeline",
+		{
+			headers: { Authorization: `Bearer ${process.env.API_KEY}` },
+			method: "POST",
+			body: JSON.stringify(data),
+		}
+	);
+	const result = await response.json();
+	return result;
+}
 // Appointments - LABEL_0
 // Questions - LABEL_1
 // Weather - LABEL_2
 
 //example repsonse is:
 // [[{"label":"LABEL_2", "score":0.8822324275970459}, {"label":"LABEL_1","score":0.10587149113416672}, {"label":"LABEL_O", "score":0.011896083131432533}]]
-
-// example api
-// if (city) {
-// 	apiURL = `http://api.weatherapi.com/v1/current.json?key=${process.env.WEATHER_KEY}&q=${city}&aqi=no`;
-// } else {
-// 	console.log(process.env.WEATHER_KEY);
-// 	apiURL = `http://api.weatherapi.com/v1/current.json?key=${process.env.WEATHER_KEY}&q=13346&aqi=no`;
-// }
-// try {
-// 	const query = await fetch(apiURL);
-// 	const response = await query.json();
-// 	return NextResponse.json({ response });
-// } catch (e) {
-// 	console.log(e);
-// }
