@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { auth } from "@/utils/firebase/Firebase";
 import { useRouter } from "next/navigation";
 import { signInWithPopup, GoogleAuthProvider } from "firebase/auth";
-import * as gapi from "google-api-javascript-client";
+
 export default function Profile() {
 	const router = useRouter();
 	const CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
