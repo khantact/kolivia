@@ -30,7 +30,8 @@ const handleLabel = async (data, input) => {
 	const QUESTION_LABEL = "LABEL_1";
 	const WEATHER_LABEL = "LABEL_2";
 	const DEFAULT_RESPONSE = "I dont know how to answer that question, sorry!";
-
+	const PM_TIME_START = "PM_TIME_START";
+	const PM_TIME_END = "PM_TIME_END";
 	// Vars for appointment model
 	const REASON_LABEL = "REASON";
 	const DATE_START = "DATE_START";
@@ -42,6 +43,38 @@ const handleLabel = async (data, input) => {
 	// 	hour: "2-digit",
 	// 	hour12: false,
 	// });
+
+	const createCalendarEvent = async (event) => {
+		//
+		gapi.client.init;
+		({
+			clientID: CLIENT_ID,
+			discoveryDocs: [
+				"https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest",
+			],
+			scope: "https://www.googleapis.com/auth/calendar",
+		})
+			.then(() => {
+				const accessToken = googleUser?.accessToken;
+				gapi.auth.setToken({ access_token: accessToken });
+				const request = gapi.client.calendar.events.insert({
+					calendarId: "primary",
+					resource: event,
+				});
+				request.execute(callbackFunction);
+			})
+			.catch((e) => {
+				console.log("error creating calendar event");
+			});
+	};
+
+	const callbackFunction = (event) => {
+		if (event.status === 200) {
+			console.log("Event created successfully:", event.id);
+		} else {
+			console.error("Error creating event:", event);
+		}
+	};
 
 	for (let i = 0; i < data.length; i++) {
 		for (let j = 0; j < data[i].length; j++) {
@@ -63,16 +96,19 @@ const handleLabel = async (data, input) => {
 		appointmentResponse = true;
 		appointmentMapping(input["inputs"]).then((response) => {
 			// example response:
+			console.log(element);
 			// [{"entity_group":"REASON","word":"go to the Dentist","start":23,"end":40,"score":1},{"entity_group":"PM_TIME_START","word":"3","start":46,"end":47,"score":1},{"entity_group":"DATE_END","word":"5","start":48,"end":49,"score":1}]
 			response.forEach((element) => {
-				console.log(element);
 				// element is dictionary
-				if (element[entity_group] === REASON_LABEL) {
-					calendarReason = element[word];
-				} else if (element[entity_group] === DATE_START) {
-					dateStart = element[word];
-				} else if (element[entity_group] === DATE_END) {
-					dateEnd = element[word];
+				if (element["entity_group"] === REASON_LABEL) {
+					calendarReason = element["word"];
+					console.log("calVar:", calendarReason);
+				} else if (element["entity_group"] === DATE_START) {
+					dateStart = element["word"];
+					console.log("dateStart:", dateStart);
+				} else if (element["entity_group"] === DATE_END) {
+					dateEnd = element["word"];
+					console.log("dateEnd:", dateEnd);
 				}
 			});
 		});

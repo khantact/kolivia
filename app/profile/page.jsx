@@ -1,12 +1,41 @@
 "use client";
 import React from "react";
 import SideNavBar from "@/components/sideNavBar";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { auth } from "@/utils/firebase/Firebase";
 import { useRouter } from "next/navigation";
-
+import { signInWithPopup, GoogleAuthProvider } from "firebase/auth";
+import * as gapi from "google-api-javascript-client";
 export default function Profile() {
 	const router = useRouter();
+	const CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
+	const API_KEY = process.env.GOOGLE_API_KEY;
+	const provider = new GoogleAuthProvider();
+	const [googleAccountLinked, setGoogleAccountLinked] = useState(false);
+	const [googleUser, setGoogleUser] = useState(null);
+
+	// GOOGLE CALENDAR HELPER FUNCTIONS
+	const handleAuth = () => {
+		if (!googleAccountLinked) {
+			signInWithPopup(auth, provider)
+				.then((result) => {
+					// access token
+					const credential =
+						GoogleAuthProvider.credentialFromResult(result);
+					const token = credential?.accessToken;
+					const user = result.user;
+					setGoogleAccountLinked(true);
+					setGoogleUser(user);
+				})
+				.catch((e) => {
+					console.log("error logging in google account");
+					console.log("error message:", e.message);
+					setGoogleAccountLinked(false);
+				});
+		}
+	};
+
+	// auth checking
 	useEffect(() => {
 		const unsubscribe = auth.onAuthStateChanged((user) => {
 			if (!user) {
@@ -17,6 +46,7 @@ export default function Profile() {
 		return () => unsubscribe();
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
+
 	return (
 		<div className="flex">
 			<div className="">
@@ -61,8 +91,15 @@ export default function Profile() {
 					Delete Account
 				</button>
 
-				<button className="bg-green-500 text-white py-2 px-4 rounded-md">
-					Link Google Account
+				<button
+					onClick={handleAuth}
+					className="bg-green-500 text-white py-2 px-4 rounded-md"
+				>
+					{googleAccountLinked ? (
+						<span>Google Account Already Linked!</span>
+					) : (
+						<span>Link Google Account</span>
+					)}
 				</button>
 			</div>
 		</div>

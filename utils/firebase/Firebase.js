@@ -2,7 +2,7 @@ import { initializeApp } from "firebase/app";
 
 import { getAuth } from "firebase/auth";
 const firebaseConfig = {
-	apiKey: "AIzaSyCoeTUQ4wuM-o3R7XCOlU6xmFMr9FwwU2g",
+	apiKey: "AIzaSyAbMekr5Dw9Xl4K4S1Jq1GtNGGewChxu_Y",
 	authDomain: "kolivia-e81f8.firebaseapp.com",
 	projectId: "kolivia-e81f8",
 	storageBucket: "kolivia-e81f8.appspot.com",
