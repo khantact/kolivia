@@ -1,2 +1,1 @@
-implement date checking for the weather api (tomorrow, in 2 days, etc.)
-profile screen needs to be implemented
+Fix time implementation, time is off by couple hours probably using UTC

@@ -44,7 +44,7 @@ export async function eventCreation(data) {
 		console.log(e.message);
 	}
 	// create google event
-	console.log(data);
+
 	const event = {
 		summary: summary,
 		start: {
@@ -67,7 +67,6 @@ export async function eventCreation(data) {
 		}
 	)
 		.then((data) => {
-			console.log(data.json());
 			return data.json();
 		})
 		.then((data) => {
