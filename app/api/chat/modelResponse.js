@@ -1,4 +1,6 @@
 "use server";
+import { eventCreation } from "../google/eventCreation";
+
 export async function query(data) {
 	try {
 		const response = await fetch(
@@ -8,7 +10,7 @@ export async function query(data) {
 					Authorization: `Bearer ${process.env.API_KEY}`,
 				},
 				method: "POST",
-				body: JSON.stringify(data),
+				body: JSON.stringify(data.inputs),
 				options: data.options,
 			}
 		);
@@ -36,45 +38,7 @@ const handleLabel = async (data, input) => {
 	const REASON_LABEL = "REASON";
 	const DATE_START = "DATE_START";
 	const DATE_END = "DATE_END";
-	let calendarReason = "";
-	let dateStart = "";
-	let dateEnd = "";
-	// let currentHour = new Date().toLocaleTimeString([], {
-	// 	hour: "2-digit",
-	// 	hour12: false,
-	// });
-
-	const createCalendarEvent = async (event) => {
-		//
-		gapi.client.init;
-		({
-			clientID: CLIENT_ID,
-			discoveryDocs: [
-				"https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest",
-			],
-			scope: "https://www.googleapis.com/auth/calendar",
-		})
-			.then(() => {
-				const accessToken = googleUser?.accessToken;
-				gapi.auth.setToken({ access_token: accessToken });
-				const request = gapi.client.calendar.events.insert({
-					calendarId: "primary",
-					resource: event,
-				});
-				request.execute(callbackFunction);
-			})
-			.catch((e) => {
-				console.log("error creating calendar event");
-			});
-	};
-
-	const callbackFunction = (event) => {
-		if (event.status === 200) {
-			console.log("Event created successfully:", event.id);
-		} else {
-			console.error("Error creating event:", event);
-		}
-	};
+	let googleDict = {};
 
 	for (let i = 0; i < data.length; i++) {
 		for (let j = 0; j < data[i].length; j++) {
@@ -94,23 +58,23 @@ const handleLabel = async (data, input) => {
 		weatherResponse = true;
 	} else if (labelWithMaxScore === APPOINTMENT_LABEL) {
 		appointmentResponse = true;
-		appointmentMapping(input["inputs"]).then((response) => {
+		appointmentMapping(input["inputs"]).then(async (response) => {
 			// example response:
-			console.log(element);
 			// [{"entity_group":"REASON","word":"go to the Dentist","start":23,"end":40,"score":1},{"entity_group":"PM_TIME_START","word":"3","start":46,"end":47,"score":1},{"entity_group":"DATE_END","word":"5","start":48,"end":49,"score":1}]
+
 			response.forEach((element) => {
 				// element is dictionary
+
 				if (element["entity_group"] === REASON_LABEL) {
-					calendarReason = element["word"];
-					console.log("calVar:", calendarReason);
-				} else if (element["entity_group"] === DATE_START) {
-					dateStart = element["word"];
-					console.log("dateStart:", dateStart);
-				} else if (element["entity_group"] === DATE_END) {
-					dateEnd = element["word"];
-					console.log("dateEnd:", dateEnd);
+					googleDict["calendarReason"] = element["word"];
+				} else if (element["entity_group"] === PM_TIME_START) {
+					googleDict["PM_TIME_START"] = element["word"];
+				} else if (element["entity_group"] === PM_TIME_END) {
+					googleDict["PM_TIME_END"] = element["word"];
 				}
 			});
+			googleDict["userID"] = input["userID"];
+			let awdas = await eventCreation(googleDict);
 		});
 		return;
 	} else if (labelWithMaxScore === QUESTION_LABEL) {

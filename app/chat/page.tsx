@@ -1,4 +1,5 @@
 "use client";
+
 import { useState, useEffect, useRef } from "react";
 import TypeIt from "typeit-react";
 import { query } from "../api/chat/modelResponse";
@@ -39,9 +40,10 @@ const Chat = () => {
 			setLoading(true);
 
 			try {
-				console.log("input", input);
+				const user = auth.currentUser;
 				const response = await query({
 					inputs: input,
+					userID: user?.uid,
 					options: { wait_for_model: true },
 				});
 				// json currently
