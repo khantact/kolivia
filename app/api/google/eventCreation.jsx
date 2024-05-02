@@ -67,10 +67,11 @@ export async function eventCreation(data) {
 		}
 	)
 		.then((data) => {
+			console.log(data.json());
 			return data.json();
 		})
 		.then((data) => {
-			console.log(accessToken);
+			console.log(data);
 			console.log("event created");
 		});
 	return;
