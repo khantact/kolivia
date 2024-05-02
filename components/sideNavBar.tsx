@@ -1,22 +1,18 @@
 import Link from "next/link";
 import { auth } from "@/utils/firebase/Firebase";
-import { signOut } from "firebase/auth";
+
 import { useRouter } from "next/navigation";
 import { RiHome3Line } from "react-icons/ri";
 import { IoIosChatboxes } from "react-icons/io";
 import { MdAccountCircle } from "react-icons/md";
 import { FaSignOutAlt } from "react-icons/fa";
-
+import { signOut } from "next-auth/react";
 const SideNavBar = () => {
 	const router = useRouter();
 	const handleSignOut = () => {
-		signOut(auth)
-			.then(() => {
-				router.push("/");
-			})
-			.catch((e) => {
-				// console.log(e.message);
-			});
+		signOut().then(() => {
+			router.push("/");
+		});
 	};
 	return (
 		<nav className="h-screen bg-gray-800 text-white min-w-[15vw] p-4">

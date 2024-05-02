@@ -58,11 +58,10 @@ const handleLabel = async (data, input) => {
 		weatherResponse = true;
 	} else if (labelWithMaxScore === APPOINTMENT_LABEL) {
 		appointmentResponse = true;
-		appointmentMapping(input["inputs"]).then(async (response) => {
+		await appointmentMapping(input["inputs"]).then(async (response) => {
 			// example response:
 			// [{"entity_group":"REASON","word":"go to the Dentist","start":23,"end":40,"score":1},{"entity_group":"PM_TIME_START","word":"3","start":46,"end":47,"score":1},{"entity_group":"DATE_END","word":"5","start":48,"end":49,"score":1}]
-
-			response.forEach((element) => {
+			response?.forEach((element) => {
 				// element is dictionary
 
 				if (element["entity_group"] === REASON_LABEL) {
@@ -73,7 +72,8 @@ const handleLabel = async (data, input) => {
 					googleDict["PM_TIME_END"] = element["word"];
 				}
 			});
-			googleDict["userID"] = input["userID"];
+
+			googleDict["userID"] = input?.user?.id;
 			let awdas = await eventCreation(googleDict);
 		});
 		return;

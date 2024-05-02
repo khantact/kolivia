@@ -1,13 +1,16 @@
 "use client";
-
 import { useState, useEffect, useRef } from "react";
 import TypeIt from "typeit-react";
 import { query } from "../api/chat/modelResponse";
 import SideNavBar from "@/components/sideNavBar";
 import { auth } from "@/utils/firebase/Firebase";
-import { useRouter } from "next/navigation";
 import SingleForecast from "@/components/singleForecast";
+import { loginIsRequired } from "@/utils/auth";
+import { useSession } from "next-auth/react";
 const Chat = () => {
+	loginIsRequired();
+	const { data: session } = useSession();
+	const user = session?.user;
 	const GREETING_MSG =
 		"Hi! I'm KOlivia! I can check the weather or make an appointment for you!";
 	const [messages, setMessages] = useState<
@@ -17,7 +20,6 @@ const Chat = () => {
 	const [input, setInput] = useState("");
 	const [botResponse, setBotResponse] = useState("");
 	const [apiResponse, setApiResponse] = useState([{}]);
-	const router = useRouter();
 	const [loading, setLoading] = useState(false);
 	const [chatDisabled, setChatDisabled] = useState(false);
 	const [currentTime, setCurrentTime] = useState("");
@@ -40,10 +42,9 @@ const Chat = () => {
 			setLoading(true);
 
 			try {
-				const user = auth.currentUser;
 				const response = await query({
 					inputs: input,
-					userID: user?.uid,
+					user: user,
 					options: { wait_for_model: true },
 				});
 				// json currently
@@ -79,17 +80,6 @@ const Chat = () => {
 	};
 
 	// EFFECT HOOKS
-
-	useEffect(() => {
-		const unsubscribe = auth.onAuthStateChanged((user) => {
-			if (!user) {
-				router.push("/login");
-			}
-		});
-
-		return () => unsubscribe();
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, []);
 
 	useEffect(() => {
 		setMounted(true);

@@ -1,12 +1,17 @@
 import React from "react";
 import { getDoc, doc } from "firebase/firestore";
 import { auth, db } from "@/utils/firebase/Firebase";
-import { onAuthStateChanged } from "firebase/auth";
+import * as chrono from "chrono-node";
+
 export async function eventCreation(data) {
 	// data is dictionary with labels
-	console.log("eventCreation:", data);
+
+	// console.log("eventCreation:", data);
 	const uid = data["userID"];
 	let refreshToken = "";
+	let accessToken = "";
+	let summary = data.calendarReason;
+
 	// example of data
 	// {
 	//   calendarReason: 'go to the Dentist',
@@ -19,19 +24,54 @@ export async function eventCreation(data) {
 	} else {
 		console.log("error in retrieving refreshtoken");
 	}
-	const oauth2client = new google();
+
 	try {
-		// console.log(response);
-		// const response = await fetch("https://oauth2.googleapis.com/token", {
-		// 	method: "POST",
-		// 	client_id:
-		// 		"5306929988-tekg4kvr1onm3em4p8gf2gbsai3ef5ac.apps.googleusercontent.com",
-		// 	client_secret: process.env.GOOGLE_CLIENT_SECRET,
-		// 	grant_type: "refresh_token",
-		// 	refresh_token: refreshToken,
-		// });
+		const params = new URLSearchParams();
+		params.append("client_id", process.env.GOOGLE_CLIENT_ID);
+		params.append("client_secret", process.env.GOOGLE_CLIENT_SECRET);
+		params.append("grant_type", "refresh_token");
+		params.append("refresh_token", refreshToken);
+		const response = await fetch("https://oauth2.googleapis.com/token", {
+			method: "POST",
+			headers: { "Content-Type": "application/x-www-form-urlencoded" },
+			body: params,
+		});
+		if (response.ok) {
+			const data = await response.json();
+			accessToken = data.access_token;
+		}
 	} catch (e) {
 		console.log(e.message);
 	}
+	// create google event
+	console.log(data);
+	const event = {
+		summary: summary,
+		start: {
+			dateTime: chrono.parseDate(data.PM_TIME_START).toISOString(),
+			timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+		},
+		end: {
+			dateTime: chrono.parseDate(data.PM_TIME_END).toISOString(),
+			timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+		},
+	};
+	await fetch(
+		"https://www.googleapis.com/calendar/v3/calendars/primary/events",
+		{
+			method: "POST",
+			headers: {
+				Authorization: "Bearer " + accessToken,
+			},
+			body: JSON.stringify(event),
+		}
+	)
+		.then((data) => {
+			return data.json();
+		})
+		.then((data) => {
+			console.log(accessToken);
+			console.log("event created");
+		});
 	return;
 }

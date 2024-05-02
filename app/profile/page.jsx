@@ -1,15 +1,13 @@
 "use client";
 import React from "react";
 import SideNavBar from "@/components/sideNavBar";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { auth } from "@/utils/firebase/Firebase";
-import { useRouter } from "next/navigation";
 import { signInWithPopup, GoogleAuthProvider } from "firebase/auth";
-
+import { authConfig, loginIsRequired } from "@/utils/auth";
+import { getSession } from "next-auth/react";
 export default function Profile() {
-	const router = useRouter();
-	const CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
-	const API_KEY = process.env.GOOGLE_API_KEY;
+	loginIsRequired();
 	const provider = new GoogleAuthProvider();
 	const [googleAccountLinked, setGoogleAccountLinked] = useState(false);
 	const [googleUser, setGoogleUser] = useState(null);
@@ -34,18 +32,6 @@ export default function Profile() {
 				});
 		}
 	};
-
-	// auth checking
-	useEffect(() => {
-		const unsubscribe = auth.onAuthStateChanged((user) => {
-			if (!user) {
-				router.push("/login");
-			}
-		});
-
-		return () => unsubscribe();
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, []);
 
 	return (
 		<div className="flex">
