@@ -14,7 +14,7 @@ const Chat = () => {
 	const GREETING_MSG =
 		"Hi! I'm KOlivia! I can check the weather or make an appointment for you!";
 	const [messages, setMessages] = useState<
-		{ text: any; sender: "user" | "bot" }[]
+		{ text: any; sender: "user" | "bot"; time: any }[]
 	>([]);
 	const [mounted, setMounted] = useState(false);
 	const [input, setInput] = useState("");
@@ -33,10 +33,11 @@ const Chat = () => {
 	};
 
 	const handleUserMessage = async () => {
+		let currentTime = new Date().toLocaleTimeString;
 		if (input.trim() !== "") {
 			setMessages((prevMessages) => [
 				...prevMessages,
-				{ text: input, sender: "user" },
+				{ text: input, sender: "user", time: currentTime},
 			]);
 			setChatDisabled(true);
 			setLoading(true);
@@ -56,7 +57,7 @@ const Chat = () => {
 				} else {
 					setMessages((prevMessages) => [
 						...prevMessages,
-						{ text: response, sender: "bot" },
+						{ text: response, sender: "bot", time : currentTime },
 					]);
 				}
 				console.log("currenthour:", getDate());
@@ -89,6 +90,7 @@ const Chat = () => {
 				{
 					text: GREETING_MSG,
 					sender: "bot",
+					time: "error"
 				},
 			]);
 		}
@@ -100,7 +102,7 @@ const Chat = () => {
 	}, [messages]);
 	useEffect(() => {
 		try {
-			console.log("type", apiResponse);
+			// console.log("type", apiResponse);
 			if ((apiResponse as any)["type"] === "weather") {
 				const forecastComponents = (apiResponse as any)["data"].map(
 					(forecastItem: any, index: any) => (
@@ -112,10 +114,11 @@ const Chat = () => {
 				);
 				setMessages((prevMessages) => [
 					...prevMessages,
-					{ text: forecastComponents, sender: "bot" },
+					{ text: forecastComponents, sender: "bot", time: currentTime },
 				]);
 			}
 		} catch (e: any) {
+			let currentTime = new Date().toLocaleTimeString;
 			console.log(e.message);
 			console.log("error has occured");
 			setMessages((prevMessages) => [
@@ -123,18 +126,20 @@ const Chat = () => {
 				{
 					text: "There was an error retrieving the forecast, please try again.",
 					sender: "bot",
+					time: currentTime
+					
 				},
 			]);
 		}
 	}, [apiResponse]);
 
 	return (
-		<div className="flex">
+		<div className="flex bg-gradient-to-b from-black to-gray-900">
 			<div className="">
 				<SideNavBar />
 			</div>
 			<div className=" grow flex flex-col">
-				<div className="bg-black grow p-4 relative">
+				<div className="grow p-4 relative">
 					<div
 						className="overflow-y-auto max-h-[calc(100vh-120px)] h-full scrollbar"
 						ref={chatboxRef}
@@ -143,13 +148,17 @@ const Chat = () => {
 							<div key={index} className="w-full">
 								{message.sender === "user" ? (
 									<div className="flex flex-row-reverse">
-										<div className="m-4 text-wrap flex flex-row-reverse rounded-tl-lg rounded-br-lg rounded-bl-lg bg-purple-500 text-black p-4 max-w-[calc(50%-32px)]">
+										<div className="m-4 text-wrap flex flex-row-reverse rounded-tl-lg rounded-br-lg rounded-bl-lg bg-gradient-to-r from-purple-600 from-75% to-purple-900  text-black p-4 max-w-[calc(50%-32px)]">
 											{message.text}
 										</div>
+										<div className="bg-red-400">
+											{message.time}
+										</div>
+										
 									</div>
 								) : (
 									<div className="flex">
-										<div className="m-4 text-wrap rounded-tr-lg rounded-br-lg rounded-bl-lg bg-blue-500 p-4 text-black max-w-[calc(50vw)]">
+										<div className="m-4 text-wrap rounded-tr-lg rounded-br-lg rounded-bl-lg bg-gradient-to-r from-blue-600 from-25% to-blue-800 p-4 text-black max-w-[calc(50vw)]">
 											<div className="flex gap-5 flex-wrap">
 												{typeof message.text ===
 												"string" ? (
@@ -205,16 +214,16 @@ const Chat = () => {
 						value={input}
 						onChange={(e) => setInput(e.target.value)}
 						placeholder="Type a message..."
-						className="p-2 flex-grow border border-gray-300 rounded-l-lg text-black bottom-0"
+						className="p-2 flex-grow border border-gray-300 rounded-md h-12 text-black bottom-0"
 						disabled={chatDisabled}
 					/>
-					<button
+					{/* <button
 						onClick={handleUserMessage}
 						className="p-4 bg-purple-500 text-black rounded-r-lg"
 						disabled={chatDisabled}
 					>
 						Send
-					</button>
+					</button> */}
 				</div>
 			</div>
 		</div>

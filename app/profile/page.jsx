@@ -69,7 +69,7 @@ export default function Profile() {
 					/>
 				</div>
 
-				<button className="bg-blue-500 text-white py-2 px-4 rounded-md mr-2">
+				<button className="bg-gray-500 text-white py-2 px-4 rounded-md mr-2 cursor-not-allowed" disabled>
 					Change Password
 				</button>
 
@@ -79,7 +79,7 @@ export default function Profile() {
 
 				<button
 					onClick={handleAuth}
-					className="bg-green-500 text-white py-2 px-4 rounded-md"
+					className="bg-gray-500 text-white py-2 px-4 rounded-md cursor-not-allowed" disabled
 				>
 					{googleAccountLinked ? (
 						<span>Google Account Already Linked!</span>

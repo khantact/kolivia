@@ -17,18 +17,21 @@ const SideNavBar = () => {
 	return (
 		<nav className="h-screen bg-gray-800 text-white min-w-[15vw] p-4">
 			<div className="">
-				<h1 className="text-2xl font-bold border-b-4 shadow-md border-gray-700 w-full">
+				<h1 className="text-2xl font-bold border-b-4 shadow-md border-gray-700 w-full text-center">
 					KOlivia
 				</h1>
 			</div>
-			<ul className="space-y-2">
+			<ul className="space-y-10 just">
 				<li className="">
 					<Link
 						href="/"
 						className="py-2 mt-4 p-2 hover:bg-gray-700 w-full flex gap-4 rounded-md transition ease-in duration-50"
 					>
+						<div className="flex gap-4 w-full place-content-center">
+
 						<RiHome3Line className="text-xl" />
 						Home
+						</div>
 					</Link>
 				</li>
 				<li className="">
@@ -36,8 +39,11 @@ const SideNavBar = () => {
 						href="/chat"
 						className="py-2 p-2 hover:bg-gray-700 w-full flex gap-4 rounded-md transition ease-in duration-50"
 					>
+						<div className="flex gap-4 w-full place-content-center">
+
 						<IoIosChatboxes className="text-xl" />
 						Chat
+						</div>
 					</Link>
 				</li>
 				<li className="flex">
@@ -45,8 +51,11 @@ const SideNavBar = () => {
 						href="/profile"
 						className="py-2 p-2 hover:bg-gray-700 w-full flex gap-4 rounded-md transition ease-in duration-50"
 					>
+						<div className="flex gap-4 w-full place-content-center">
+
 						<MdAccountCircle className="text-xl" />
 						Profile
+						</div>
 					</Link>
 				</li>
 				<li className="flex">
@@ -55,8 +64,11 @@ const SideNavBar = () => {
 						className="py-2 p-2 hover:bg-gray-700 w-full flex gap-4 rounded-md transition ease-in duration-50"
 						onClick={handleSignOut}
 					>
+						<div className="flex gap-4 w-full place-content-center">
+
 						<FaSignOutAlt className="text-xl" />
 						Sign Out
+						</div>
 					</Link>
 				</li>
 			</ul>

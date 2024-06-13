@@ -1,23 +1,23 @@
 "use client";
-import { signIn } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
 import Link from "next/link";
 import { auth } from "../utils/firebase/Firebase";
 import { onAuthStateChanged } from "firebase/auth";
 import { useState, useEffect } from "react";
-import { useSession } from "next-auth/react";
 
 export default function Home() {
+	const { data: session, status } = useSession();
 	const [signedIn, setSignedIn] = useState(false);
+	
 	useEffect(() => {
-		const unsubscribe = onAuthStateChanged(auth, (user) => {
-			if (user) {
-				setSignedIn(true);
-			} else {
-				setSignedIn(false);
-			}
-		});
-		return () => unsubscribe();
-	}, []);
+		if (status === "authenticated") {
+			setSignedIn(true)
+		} else {
+			setSignedIn(false)
+		}
+
+	}, [])
+	
 
 	return (
 		<div>
@@ -38,21 +38,21 @@ export default function Home() {
 						</button>
 					</div>
 				) : (
-					<div className="grid grid-cols-2 gap-5 text-2xl pt-8">
+					<div className="grid grid-cols-1 gap-5 text-2xl pt-8 items-center">
 						<button
 							onClick={async () => {
 								await signIn("google", {
 									callbackUrl: "/chat",
 								});
 							}}
-							className="rounded-full bg-purple-700 py-2 px-4 hover:bg-purple-900 transition ease-in delay-75 duration-100 shadow-md"
+							className="rounded-full bg-purple-700 py-2 px-4 duration-100 shadow-md hover:bg-pink-800 transition ease-in delay-100 "
 						>
-							Login
+							Login with Google
 						</button>
 
-						<button className="rounded-full bg-purple-700 py-2 px-4 hover:bg-purple-900 transition ease-in delay-75 duration-100 shadow-md">
+						{/* <button className="rounded-full bg-purple-700 py-2 px-4 hover:bg-purple-900 transition ease-in delay-75 duration-100 shadow-md">
 							<Link href="/register">Register</Link>
-						</button>
+						</button> */}
 					</div>
 				)}
 			</div>
