@@ -1,6 +1,10 @@
 # Kolivia
 #### Built by Kevin Han, and Olivia Malcolmson
 
+# Landing Page
+![alt text](image-1.png)
+
+# Chat Page
 ![chatbox](image.png)
 
 # Summary
