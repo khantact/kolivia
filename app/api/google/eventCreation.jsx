@@ -70,7 +70,7 @@ export async function eventCreation(data) {
 			return data.json();
 		})
 		.then((data) => {
-			console.log(data);
+			// console.log(data);
 			console.log("event created");
 		});
 	return;

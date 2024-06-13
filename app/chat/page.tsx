@@ -60,7 +60,7 @@ const Chat = () => {
 						{ text: response, sender: "bot", time : currentTime },
 					]);
 				}
-				console.log("currenthour:", getDate());
+				// console.log("currenthour:", getDate());
 			} catch (e) {
 				console.error(e);
 			}

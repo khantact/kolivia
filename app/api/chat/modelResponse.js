@@ -123,16 +123,16 @@ const handleLabel = async (data, input) => {
 		try {
 			const query = await fetch(apiURL, { cache: "no-store" });
 			const response = await query.json();
-			console.log(apiURL);
+			
 			return {
 				data: response.forecast.forecastday[0].hour,
 				type: "weather",
 			};
 		} catch (e) {
-			console.log(apiURL);
-			console.log(response);
-			console.log(dict);
-			console.log(e);
+			// console.log(apiURL);
+			// console.log(response);
+			// console.log(dict);
+			// console.log(e);
 		}
 		console.log("returning default result");
 		return result;
